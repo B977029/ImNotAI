@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace HelloWorld
 {
@@ -15,8 +16,6 @@ namespace HelloWorld
 			else
 			{
 				StatusLabels();
-
-				SubmitNewPosition();
 			}
 
 			GUILayout.EndArea();
@@ -39,20 +38,65 @@ namespace HelloWorld
 			GUILayout.Label("Mode: " + mode);
 		}
 
-		static void SubmitNewPosition()
+		void Update()
 		{
-			if (GUILayout.Button(NetworkManager.Singleton.IsServer ? "Move" : "Request Position Change"))
+			if (Input.GetKeyDown(KeyCode.W))
 			{
 				if (NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsClient)
 				{
 					foreach (ulong uid in NetworkManager.Singleton.ConnectedClientsIds)
-						NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GetComponent<HelloWorldPlayer>().Move();
+						NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GetComponent<HelloWorldPlayer>().Up();
 				}
 				else
 				{
 					var playerObject = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
 					var player = playerObject.GetComponent<HelloWorldPlayer>();
-					player.Move();
+					player.Up();
+				}
+			}
+
+			if (Input.GetKeyDown(KeyCode.S))
+			{
+				if (NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsClient)
+				{
+					foreach (ulong uid in NetworkManager.Singleton.ConnectedClientsIds)
+						NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GetComponent<HelloWorldPlayer>().Down();
+				}
+				else
+				{
+					var playerObject = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
+					var player = playerObject.GetComponent<HelloWorldPlayer>();
+					player.Down();
+				}
+			}
+
+			if (Input.GetKeyDown(KeyCode.A))
+			{
+				if (NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsClient)
+				{
+					foreach (ulong uid in NetworkManager.Singleton.ConnectedClientsIds)
+						NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GetComponent<HelloWorldPlayer>().Left();
+				}
+				else
+				{
+					var playerObject = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
+					var player = playerObject.GetComponent<HelloWorldPlayer>();
+					player.Left();
+				}
+			}
+
+			if (Input.GetKeyDown(KeyCode.D))
+			{
+				if (NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsClient)
+				{
+					foreach (ulong uid in NetworkManager.Singleton.ConnectedClientsIds)
+						NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GetComponent<HelloWorldPlayer>().Right();
+				}
+				else
+				{
+					var playerObject = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
+					var player = playerObject.GetComponent<HelloWorldPlayer>();
+					player.Right();
 				}
 			}
 		}
